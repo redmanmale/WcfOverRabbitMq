@@ -1,4 +1,5 @@
 ﻿using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace Redmanmale.WcfOverRabbitMq.Common
 {
@@ -6,6 +7,6 @@ namespace Redmanmale.WcfOverRabbitMq.Common
     public interface IWcfOverRabbitMqService
     {
         [OperationContract]
-        Response FooBar(Request request);
+        Task<Response> FooBar(Request request);
     }
 }

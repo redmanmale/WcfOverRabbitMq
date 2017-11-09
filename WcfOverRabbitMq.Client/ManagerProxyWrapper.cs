@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using Redmanmale.WcfOverRabbitMq.Common;
 
 namespace Redmanmale.WcfOverRabbitMq.Client
@@ -13,7 +14,7 @@ namespace Redmanmale.WcfOverRabbitMq.Client
             _channelFactory = new ChannelFactory<IWcfOverRabbitMqService>(BindingFactory.GetBinding(), uri);
         }
 
-        public Response FooBar(Request request)
+        public Task<Response> FooBar(Request request)
         {
             return ExecRemoteMethod(x => x.FooBar(request));
         }
@@ -23,17 +24,17 @@ namespace Redmanmale.WcfOverRabbitMq.Client
             ((IDisposable)_channelFactory)?.Dispose();
         }
 
-        private T ExecRemoteMethod<T>(Func<IWcfOverRabbitMqService, T> action)
+        private async Task<T> ExecRemoteMethod<T>(Func<IWcfOverRabbitMqService, Task<T>> action)
         {
             T remoteMethodResult;
             var proxy = _channelFactory.CreateChannel();
-            
+
             // ReSharper disable once SuspiciousTypeConversion.Global
             var communicationProxy = (ICommunicationObject)proxy;
             try
             {
                 communicationProxy.Open();
-                remoteMethodResult = action(proxy);
+                remoteMethodResult = await action(proxy).ConfigureAwait(false);
             }
             catch (Exception e)
             {

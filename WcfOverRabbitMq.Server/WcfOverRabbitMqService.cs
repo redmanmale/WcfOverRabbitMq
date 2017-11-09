@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using Redmanmale.WcfOverRabbitMq.Common;
 
 namespace Redmanmale.WcfOverRabbitMq.Server
@@ -7,7 +8,7 @@ namespace Redmanmale.WcfOverRabbitMq.Server
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)]
     public class WcfOverRabbitMqService : IWcfOverRabbitMqService
     {
-        public Response FooBar(Request request)
+        public Task<Response> FooBar(Request request)
         {
             var response = new Response
             {
@@ -17,7 +18,7 @@ namespace Redmanmale.WcfOverRabbitMq.Server
 
             Console.WriteLine("Response sent");
 
-            return response;
+            return Task.FromResult(response);
         }
     }
 }
