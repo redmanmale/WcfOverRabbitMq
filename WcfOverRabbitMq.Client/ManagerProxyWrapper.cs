@@ -14,15 +14,11 @@ namespace Redmanmale.WcfOverRabbitMq.Client
             _channelFactory = new ChannelFactory<IWcfOverRabbitMqService>(BindingFactory.GetBinding(), uri);
         }
 
-        public Task<Response> FooBar(Request request)
-        {
-            return ExecRemoteMethod(x => x.FooBar(request));
-        }
+        public Task<Response> FooBarAsync(Request request) => ExecRemoteMethod(x => x.FooBarAsync(request));
 
-        public void Dispose()
-        {
-            ((IDisposable)_channelFactory)?.Dispose();
-        }
+        public Task SayHelloAsync(string hello) => ExecRemoteMethod(x => x.SayHelloAsync(hello));
+
+        public void Dispose() => ((IDisposable)_channelFactory)?.Dispose();
 
         private async Task<T> ExecRemoteMethod<T>(Func<IWcfOverRabbitMqService, Task<T>> action)
         {
@@ -52,6 +48,34 @@ namespace Redmanmale.WcfOverRabbitMq.Client
                 }
             }
             return remoteMethodResult;
+        }
+
+        private async Task ExecRemoteMethod(Func<IWcfOverRabbitMqService, Task> action)
+        {
+            var proxy = _channelFactory.CreateChannel();
+
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            var communicationProxy = (ICommunicationObject)proxy;
+            try
+            {
+                communicationProxy.Open();
+                await action(proxy).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Operation failed. Unknown error.", e);
+            }
+            finally
+            {
+                if (communicationProxy.State == CommunicationState.Opened)
+                {
+                    communicationProxy.Close();
+                }
+                else
+                {
+                    communicationProxy.Abort();
+                }
+            }
         }
     }
 }

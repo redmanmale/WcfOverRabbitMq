@@ -8,7 +8,7 @@ namespace Redmanmale.WcfOverRabbitMq.Server
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)]
     public class WcfOverRabbitMqService : IWcfOverRabbitMqService
     {
-        public Task<Response> FooBar(Request request)
+        public Task<Response> FooBarAsync(Request request)
         {
             var response = new Response
             {
@@ -19,6 +19,13 @@ namespace Redmanmale.WcfOverRabbitMq.Server
             Console.WriteLine("Response sent");
 
             return Task.FromResult(response);
+        }
+
+        public Task SayHelloAsync(string hello)
+        {
+            Console.WriteLine($"Hello, {hello}");
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -7,6 +7,9 @@ namespace Redmanmale.WcfOverRabbitMq.Common
     public interface IWcfOverRabbitMqService
     {
         [OperationContract]
-        Task<Response> FooBar(Request request);
+        Task<Response> FooBarAsync(Request request);
+
+        [OperationContract]
+        Task SayHelloAsync(string hello);
     }
 }

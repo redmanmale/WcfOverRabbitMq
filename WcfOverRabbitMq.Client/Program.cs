@@ -25,8 +25,10 @@ namespace Redmanmale.WcfOverRabbitMq.Client
 
                 Console.WriteLine("Request sent");
 
-                var response = await client.FooBar(request).ConfigureAwait(false);
+                var response = await client.FooBarAsync(request).ConfigureAwait(false);
                 Console.WriteLine(response);
+
+                await client.SayHelloAsync("world!").ConfigureAwait(false);
             }
         }
     }
