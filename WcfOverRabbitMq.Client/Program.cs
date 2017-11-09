@@ -7,7 +7,7 @@ namespace Redmanmale.WcfOverRabbitMq.Client
     {
         private static void Main()
         {
-            var client = new ManagerProxyWrapper("http://localhost/Temporary_Listen_Addresses");
+            var client = new ManagerProxyWrapper(BindingFactory.ServiceUri);
 
             var request = new Request
             {

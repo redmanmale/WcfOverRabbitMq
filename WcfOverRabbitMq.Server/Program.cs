@@ -11,9 +11,7 @@ namespace Redmanmale.WcfOverRabbitMq.Server
             var wcfOverRabbitMqService = new WcfOverRabbitMqService();
             var wcfOverRabbitMqServiceHost = new WebServiceHost(wcfOverRabbitMqService);
 
-            wcfOverRabbitMqServiceHost.AddServiceEndpoint(typeof(IWcfOverRabbitMqService),
-                                                          BindingFactory.GetBinding(),
-                                                          "http://localhost/Temporary_Listen_Addresses");
+            wcfOverRabbitMqServiceHost.AddServiceEndpoint(typeof(IWcfOverRabbitMqService), BindingFactory.GetBinding(), BindingFactory.ServiceUri);
             wcfOverRabbitMqServiceHost.Open();
 
             Console.WriteLine("Running...");

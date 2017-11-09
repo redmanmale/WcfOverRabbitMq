@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ServiceModel;
-using System.ServiceModel.Description;
 using Redmanmale.WcfOverRabbitMq.Common;
 
 namespace Redmanmale.WcfOverRabbitMq.Client
@@ -12,7 +11,6 @@ namespace Redmanmale.WcfOverRabbitMq.Client
         public ManagerProxyWrapper(string uri)
         {
             _channelFactory = new ChannelFactory<IWcfOverRabbitMqService>(BindingFactory.GetBinding(), uri);
-            _channelFactory.Endpoint.Behaviors.Add(new WebHttpBehavior());
         }
 
         public Response FooBar(Request request)
